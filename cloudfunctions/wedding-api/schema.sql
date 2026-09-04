@@ -19,5 +19,8 @@ create table if not exists public.wedding_photos (
 create index if not exists wedding_photos_created_at_idx
   on public.wedding_photos (created_at desc);
 
+create unique index if not exists wedding_photos_cloud_path_idx
+  on public.wedding_photos (cloud_path);
+
 alter table public.wedding_wishes enable row level security;
 alter table public.wedding_photos enable row level security;

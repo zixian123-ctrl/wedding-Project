@@ -106,12 +106,14 @@ exports.main = async (event) => {
       const wish = cleanText(body.wish, 120);
       if (!name || !wish) return response(400, { error: '请填写姓名和祝福' }, origin);
       const item = { name, wish, createdAt: new Date().toISOString() };
-      const { error } = await db.from('wedding_wishes').insert({
+      const { data: inserted, error } = await db.from('wedding_wishes').insert({
         name,
         wish,
         created_at: item.createdAt
-      });
+      }).select('id');
       if (error) throw error;
+      if (!inserted?.length) throw new Error('祝福未写入数据库');
+      item.id = inserted[0].id;
       return response(201, { ok: true, wish: item }, origin);
     }
 
@@ -158,13 +160,17 @@ exports.main = async (event) => {
       if (uploadError) throw uploadError;
       const storedPath = uploaded.path || cloudPath;
       const item = { name, fileId: storedPath, cloudPath: storedPath, createdAt: new Date().toISOString() };
-      const { error } = await db.from('wedding_photos').insert({
+      const { data: inserted, error } = await db.from('wedding_photos').insert({
         name,
         file_id: item.fileId,
         cloud_path: storedPath,
         created_at: item.createdAt
-      });
-      if (error) throw error;
+      }).select('id');
+      if (error || !inserted?.length) {
+        await storage.remove([storedPath]).catch(() => {});
+        throw error || new Error('照片记录未写入数据库');
+      }
+      item.id = inserted[0].id;
       return response(201, { ok: true, photo: item }, origin);
     }
 
