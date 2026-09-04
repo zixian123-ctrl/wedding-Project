@@ -34,3 +34,9 @@
 .wish-card span{position:relative;z-index:1;align-self:flex-end;padding-left:38px;color:#a5793e;font:italic 15px "Noto Serif SC",serif}
 .wish-card span:before{content:"";position:absolute;left:0;top:50%;width:28px;height:1px;background:#b9945f80}
 @media(max-width:720px){.wish-wall{grid-template-columns:1fr;gap:12px;width:min(310px,92%);margin:28px auto 0}.wish-card{min-height:102px;padding:24px 20px 15px;border-radius:14px}.wish-card:nth-child(2){width:94%;margin:auto;opacity:.9}.wish-card p{font-size:13px;line-height:1.7;margin-bottom:8px}.wish-card:before{font-size:38px}}
+
+/* GSAP progressive enhancement: the original reveal remains as a safe fallback. */
+body.gsap-ready .reveal{transition:none}
+body.gsap-ready .hero-photo,body.gsap-ready .finale-photo{will-change:transform}
+body.gsap-ready .timeline article,body.gsap-ready .gallery-item,body.gsap-ready .schedule-line article,body.gsap-ready .transport-grid article,body.gsap-ready .wish-card{will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.scroll-cue i,.music-btn.playing,.timer b.flip,.barrage-item{animation:none!important}.reveal{opacity:1;transform:none;transition:none}}

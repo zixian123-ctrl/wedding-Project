@@ -1,0 +1,16 @@
+{
+  "$schema": "https://static.cloudbase.net/cli/cloudbaserc.schema.json",
+  "envId": "wedding-prod-d4gpee3g11147219d",
+  "functionRoot": "cloudfunctions",
+  "functions": [
+    {
+      "name": "wedding-api",
+      "runtime": "Nodejs20.19",
+      "handler": "index.main",
+      "timeout": 10,
+      "memorySize": 256,
+      "installDependency": true,
+      "description": "婚礼邀请函祝福与照片接口"
+    }
+  ]
+}
