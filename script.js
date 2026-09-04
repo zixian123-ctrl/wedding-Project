@@ -55,9 +55,9 @@ function moveLightbox(step) { const all = gallerySources(); lightboxIndex = (lig
 $('#lightboxClose').onclick = () => { $('#lightbox').classList.remove('open'); document.body.style.overflow = ''; }; $('.lightbox .prev').onclick = () => moveLightbox(-1); $('.lightbox .next').onclick = () => moveLightbox(1); $('#lightbox').addEventListener('click', e => { if (e.target === $('#lightbox')) $('#lightboxClose').click(); });
 
 $('#navBtn').addEventListener('click', () => {
-  const keyword = encodeURIComponent('河北省邢台市皇寺镇皇寺村村委会');
-  const city = encodeURIComponent('邢台市');
-  const href = `https://uri.amap.com/search?keyword=${keyword}&city=${city}&view=map&src=wedding-invitation&callnative=1`;
+  const position = '114.357542,37.177688';
+  const name = encodeURIComponent('皇寺村村委会');
+  const href = `https://uri.amap.com/marker?position=${position}&name=${name}&coordinate=gaode&src=wedding-invitation&callnative=1`;
   window.location.href = href;
 });
 let captchaAnswer = 0;
@@ -65,9 +65,39 @@ function resetCaptcha() { const a = Math.ceil(Math.random() * 8), b = Math.ceil(
 resetCaptcha();
 const wishesStoreKey = 'wedding-wishes-v2';
 localStorage.removeItem('wedding-wishes');
-function renderWishes() { const wishes = store.get(wishesStoreKey, []); $('#wishWall').innerHTML = wishes.slice(-9).reverse().map(w => `<article class="wish-card"><p>“${escapeHTML(w.wish)}”</p><span>— ${escapeHTML(w.name)}</span></article>`).join(''); }
+const demoWishTexts = ['愿你们岁岁相守，朝朝相伴。', '新婚快乐，百年好合！', '往后余生，三餐四季皆温柔。', '愿所有美好都如期而至。', '从此一屋两人，温暖相伴。', '祝你们永远幸福甜蜜。', '愿此生相知相守，白首不离。', '祝新婚大喜，生活胜蜜糖。', '山水一程，愿你们携手同行。', '愿爱意常新，幸福长存。'];
+const demoWishes = Array.from({ length: 30 }, (_, i) => ({ name: `亲友 ${String(i + 1).padStart(2, '0')}`, wish: demoWishTexts[i % demoWishTexts.length] }));
+function getWishes() { return new URLSearchParams(location.search).has('demo-wishes') ? demoWishes : store.get(wishesStoreKey, []); }
+const compactWishLayout = window.matchMedia('(max-width: 720px)');
+function renderWishes() {
+  const wishes = getWishes().slice().reverse();
+  const cardCount = compactWishLayout.matches ? 2 : 3;
+  const latest = wishes.slice(0, cardCount);
+  const floating = wishes.slice(cardCount);
+  $('#wishWall').innerHTML = latest.map(w => `<article class="wish-card"><p>“${escapeHTML(w.wish)}”</p><span>— ${escapeHTML(w.name)}</span></article>`).join('');
+  const lanes = [8, 16, 82, 90];
+  const groups = Math.max(1, Math.ceil(floating.length / lanes.length));
+  const cycle = Math.max(36, groups * 12);
+  $('#wishBarrage').innerHTML = floating.map((w, i) => {
+    const laneIndex = i % lanes.length;
+    const group = Math.floor(i / lanes.length);
+    const delay = -(group * 12 + laneIndex * 1.1);
+    return `<span class="barrage-item" style="--lane:${lanes[laneIndex]}%;--cycle:${cycle}s;--delay:${delay}s">${escapeHTML(w.wish)}<b>— ${escapeHTML(w.name)}</b></span>`;
+  }).join('');
+}
+compactWishLayout.addEventListener('change', renderWishes);
 renderWishes();
 $('#rsvpForm').addEventListener('submit', e => { e.preventDefault(); if (+$('#captchaInput').value !== captchaAnswer) { $('#formStatus').textContent = '验证答案不正确，请再试一次'; resetCaptcha(); return; } const data = Object.fromEntries(new FormData(e.target)); const replies = store.get('wedding-rsvp', []); replies.push({ ...data, createdAt: new Date().toISOString() }); store.set('wedding-rsvp', replies); if (data.wish.trim()) { const wishes = store.get(wishesStoreKey, []); wishes.push({ name: data.name, wish: data.wish }); store.set(wishesStoreKey, wishes); renderWishes(); } $('#formStatus').textContent = '✓ 回执已成功保存，期待与您相见'; e.target.reset(); resetCaptcha(); });
 function escapeHTML(s = '') { return s.replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c])); }
 
-$('#shareBtn').addEventListener('click', async () => { const data = { title: document.title, text: '2026年9月28日，诚邀您相聚邢台，见证我们的幸福时刻', url: location.href }; if (navigator.share) { try { await navigator.share(data); } catch {} } else { try { await navigator.clipboard.writeText(location.href); toast('邀请链接已复制'); } catch { toast('请使用浏览器菜单分享给好友'); } } });
+const sharePreview = $('#sharePreview');
+function closeSharePreview() { sharePreview.classList.remove('open'); document.body.style.overflow = ''; }
+$('#sharePreviewClose').addEventListener('click', closeSharePreview);
+sharePreview.addEventListener('click', e => { if (e.target === sharePreview) closeSharePreview(); });
+$('#shareBtn').addEventListener('click', async () => {
+  const isLocalPreview = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname);
+  if (isLocalPreview) { sharePreview.classList.add('open'); document.body.style.overflow = 'hidden'; return; }
+  const data = { title: '💒 我们结婚啦｜刘子贤 & 吕燚娴', text: '2026年9月28日，诚邀您相聚邢台，见证我们的幸福时刻', url: 'https://zixian123-ctrl.github.io/wedding-Project/' };
+  if (navigator.share) { try { await navigator.share(data); } catch {} }
+  else { try { await navigator.clipboard.writeText(data.url); toast('邀请链接已复制，请发送到微信查看卡片'); } catch { toast('请使用浏览器菜单分享给好友'); } }
+});

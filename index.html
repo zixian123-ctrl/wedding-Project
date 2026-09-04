@@ -4,9 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#f7f0e7" />
+  <meta name="description" content="2026年9月28日，刘子贤与吕燚娴诚邀您相聚邢台，见证我们的幸福时刻。" />
   <meta property="og:title" content="💒 我们结婚啦｜刘子贤 & 吕燚娴的婚礼邀请" />
   <meta property="og:description" content="2026年9月28日，诚邀您相聚邢台，见证我们的幸福时刻" />
-  <meta property="og:image" content="assets/wedding-hero.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="刘子贤 & 吕燚娴的婚礼邀请" />
+  <meta property="og:url" content="https://zixian123-ctrl.github.io/wedding-Project/" />
+  <meta property="og:image" content="https://zixian123-ctrl.github.io/wedding-Project/assets/share-cover.jpg" />
+  <meta property="og:image:secure_url" content="https://zixian123-ctrl.github.io/wedding-Project/assets/share-cover.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="600" />
+  <meta property="og:image:height" content="600" />
+  <meta itemprop="name" content="💒 我们结婚啦｜刘子贤 & 吕燚娴" />
+  <meta itemprop="description" content="2026年9月28日，诚邀您相聚邢台，见证我们的幸福时刻" />
+  <meta itemprop="image" content="https://zixian123-ctrl.github.io/wedding-Project/assets/share-cover.jpg" />
+  <link rel="canonical" href="https://zixian123-ctrl.github.io/wedding-Project/" />
+  <link rel="image_src" href="https://zixian123-ctrl.github.io/wedding-Project/assets/share-cover.jpg" />
   <title>刘子贤 & 吕燚娴｜婚礼邀请</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +27,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <img class="wechat-share-image" src="assets/share-cover.jpg" alt="刘子贤与吕燚娴婚礼邀请分享封面" />
   <div class="grain"></div>
   <button class="music-btn" id="musicBtn" aria-label="播放背景音乐"><span>♪</span><i></i></button>
   <nav class="dots" aria-label="页面导航"></nav>
@@ -123,6 +137,7 @@
       <div class="content reveal"><p class="kicker light">BLESSINGS</p><h2>祝福墙</h2><p class="lead">每一句心意，都将成为我们珍藏的礼物</p>
         <div class="wish-wall" id="wishWall"></div>
       </div>
+      <div class="wish-barrage" id="wishBarrage" aria-label="更多祝福弹幕"></div>
     </section>
 
     <section class="panel finale" id="finale" data-label="致谢">
@@ -132,6 +147,18 @@
   </main>
 
   <div class="lightbox" id="lightbox"><button id="lightboxClose">×</button><button class="prev">‹</button><img alt="婚礼相册大图" /><button class="next">›</button></div>
+  <div class="share-preview" id="sharePreview" role="dialog" aria-modal="true" aria-label="微信分享卡片预览">
+    <div class="share-preview-panel">
+      <button class="share-preview-close" id="sharePreviewClose" aria-label="关闭预览">×</button>
+      <p class="share-preview-label">微信分享卡片预览</p>
+      <div class="wechat-card">
+        <div><h3>💒 我们结婚啦｜刘子贤 & 吕燚娴</h3><p>2026年9月28日，诚邀您相聚邢台，见证我们的幸福时刻</p></div>
+        <img src="assets/share-cover.jpg" alt="婚礼邀请分享缩略图" />
+        <small>刘子贤 & 吕燚娴的婚礼邀请</small>
+      </div>
+      <p class="share-preview-note">部署后，在微信中发送网站链接将优先显示以上卡片信息。</p>
+    </div>
+  </div>
   <div class="toast" id="toast"></div>
   <audio id="bgm" loop preload="none"><source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9d2a971b15.mp3?filename=romantic-piano-112191.mp3" type="audio/mpeg" /></audio>
   <script src="script.js"></script>
