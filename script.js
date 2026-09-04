@@ -54,7 +54,12 @@ function openLightbox(i) { lightboxIndex = i; $('.lightbox img').src = gallerySo
 function moveLightbox(step) { const all = gallerySources(); lightboxIndex = (lightboxIndex + step + all.length) % all.length; $('.lightbox img').src = all[lightboxIndex]; }
 $('#lightboxClose').onclick = () => { $('#lightbox').classList.remove('open'); document.body.style.overflow = ''; }; $('.lightbox .prev').onclick = () => moveLightbox(-1); $('.lightbox .next').onclick = () => moveLightbox(1); $('#lightbox').addEventListener('click', e => { if (e.target === $('#lightbox')) $('#lightboxClose').click(); });
 
-$('#navBtn').addEventListener('click', () => { const q = encodeURIComponent('河北省邢台市皇寺镇皇寺村村委会'); const ua = navigator.userAgent.toLowerCase(); const href = ua.includes('micromessenger') ? `https://apis.map.qq.com/uri/v1/search?keyword=${q}` : `https://uri.amap.com/search?keyword=${q}`; window.open(href, '_blank'); });
+$('#navBtn').addEventListener('click', () => {
+  const keyword = encodeURIComponent('河北省邢台市皇寺镇皇寺村村委会');
+  const city = encodeURIComponent('邢台市');
+  const href = `https://uri.amap.com/search?keyword=${keyword}&city=${city}&view=map&src=wedding-invitation&callnative=1`;
+  window.location.href = href;
+});
 let captchaAnswer = 0;
 function resetCaptcha() { const a = Math.ceil(Math.random() * 8), b = Math.ceil(Math.random() * 8); captchaAnswer = a + b; $('#captchaText').textContent = `${a} + ${b} = ?`; }
 resetCaptcha();
